@@ -8,30 +8,30 @@
   --font-montserrat: "Montserrat", sans-serif;
   --font-playball: "Playball", cursive;
 
-  --color-sage: #86efac;
+  --color-sage: #d8b4fe;
   --color-paper: #FFFFFF;
 
-  --color-theme-50: #f0fdf4;
-  --color-theme-100: #dcfce7;
-  --color-theme-200: #bbf7d0;
-  --color-theme-300: #86efac;
-  --color-theme-400: #4ade80;
-  --color-theme-500: #22c55e;
-  --color-theme-600: #16a34a;
-  --color-theme-700: #15803d;
-  --color-theme-800: #166534;
-  --color-theme-900: #14532d;
+  --color-theme-50: #faf5ff;
+  --color-theme-100: #f3e8ff;
+  --color-theme-200: #e9d5ff;
+  --color-theme-300: #d8b4fe;
+  --color-theme-400: #c084fc;
+  --color-theme-500: #a855f7;
+  --color-theme-600: #9333ea;
+  --color-theme-700: #7e22ce;
+  --color-theme-800: #6b21a8;
+  --color-theme-900: #581c87;
 }
 
 .silver-border {
-  border: 2px solid #86efac;
+  border: 2px solid #d8b4fe;
   box-shadow: 
     0 0 0 1px rgba(255, 255, 255, 0.4),
-    inset 0 0 10px rgba(134, 239, 172, 0.3);
+    inset 0 0 10px rgba(216, 180, 254, 0.3);
 }
 
 .silver-text {
-  background: linear-gradient(135deg, #4ade80 0%, #dcfce7 50%, #4ade80 100%);
+  background: linear-gradient(135deg, #c084fc 0%, #f3e8ff 50%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
@@ -129,9 +129,9 @@ html, body {
 
 .website-shell {
   background:
-    radial-gradient(circle at 18% 14%, rgba(192, 192, 192, 0.19), transparent 38%),
-    radial-gradient(circle at 84% 72%, rgba(156, 163, 175, 0.16), transparent 42%),
-    linear-gradient(180deg, #ffffff 0%, #f9fafb 42%, #ffffff 100%);
+    radial-gradient(circle at 18% 14%, rgba(192, 132, 252, 0.19), transparent 38%),
+    radial-gradient(circle at 84% 72%, rgba(168, 85, 247, 0.16), transparent 42%),
+    linear-gradient(180deg, #ffffff 0%, #faf5ff 42%, #ffffff 100%);
 }
 
 .section-floral-overlay {
@@ -143,22 +143,22 @@ html, body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 25%, rgba(192, 192, 192, 0.16), transparent 35%),
-    radial-gradient(circle at 78% 75%, rgba(156, 163, 175, 0.14), transparent 38%);
+    radial-gradient(circle at 20% 25%, rgba(192, 132, 252, 0.16), transparent 35%),
+    radial-gradient(circle at 78% 75%, rgba(168, 85, 247, 0.14), transparent 38%);
 }
 
 .paper-grain {
   background-image:
     radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.85) 0.5px, transparent 0.8px),
-    radial-gradient(circle at 78% 42%, rgba(192, 192, 192, 0.2) 0.6px, transparent 0.9px),
-    radial-gradient(circle at 42% 76%, rgba(156, 163, 175, 0.1) 0.5px, transparent 0.8px);
+    radial-gradient(circle at 78% 42%, rgba(192, 132, 252, 0.2) 0.6px, transparent 0.9px),
+    radial-gradient(circle at 42% 76%, rgba(168, 85, 247, 0.1) 0.5px, transparent 0.8px);
   background-size: 9px 9px, 15px 15px, 18px 18px;
 }
 
 .paper-grain-strong {
   background-image:
     radial-gradient(circle at 22% 24%, rgba(255, 255, 255, 0.88) 0.55px, transparent 0.85px),
-    radial-gradient(circle at 70% 64%, rgba(192, 192, 192, 0.22) 0.65px, transparent 0.95px),
+    radial-gradient(circle at 70% 64%, rgba(192, 132, 252, 0.22) 0.65px, transparent 0.95px),
     linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(249, 250, 251, 0.8));
   background-size: 8px 8px, 14px 14px, 100% 100%;
 }
