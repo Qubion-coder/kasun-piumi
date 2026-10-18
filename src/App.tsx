@@ -189,6 +189,101 @@ function CountdownTimer() {
   );
 }
 
+const galleryImages = [1, 2, 3, 4, 5].map((n) => `/pre/${n}.jpeg`);
+// Landscape photos span both columns on mobile so the grid has no gaps
+const wideGalleryImages = new Set(["/pre/2.jpeg"]);
+
+function GallerySection() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveIndex(null);
+      if (e.key === "ArrowRight") setActiveIndex((i) => (i === null ? i : (i + 1) % galleryImages.length));
+      if (e.key === "ArrowLeft") setActiveIndex((i) => (i === null ? i : (i - 1 + galleryImages.length) % galleryImages.length));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [activeIndex]);
+
+  const step = (dir: number) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex((i) => (i === null ? i : (i + dir + galleryImages.length) % galleryImages.length));
+  };
+
+  return (
+    <section className="cv-auto py-24 md:py-36 bg-[#FFFFFF] relative overflow-hidden">
+      <div className="absolute inset-0 opacity-5 paper-grain pointer-events-none" />
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-theme-200 blur-[150px] rounded-full opacity-20 pointer-events-none" />
+
+      <div className="container mx-auto px-4 md:px-6 max-w-6xl relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-col items-center text-center mb-12 md:mb-20"
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-10 h-[2px] bg-theme-500" />
+            <span className="text-theme-600 font-bold uppercase tracking-[0.4em] text-[9px] md:text-[11px]">Our Moments</span>
+            <div className="w-10 h-[2px] bg-theme-500" />
+          </div>
+          <h2 className="font-playball text-[3.5rem] sm:text-[4rem] md:text-[5.5rem] text-theme-900 leading-[1] drop-shadow-sm">
+            Gallery
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-2 grid-flow-dense gap-3 md:block md:columns-3 md:gap-6">
+          {galleryImages.map((src, i) => (
+            <motion.button
+              key={src}
+              type="button"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: (i % 3) * 0.1 }}
+              onClick={() => setActiveIndex(i)}
+              className={`block w-full md:mb-6 break-inside-avoid ${wideGalleryImages.has(src) ? "col-span-2" : ""} bg-white p-1.5 md:p-2 rounded-2xl border border-theme-200 shadow-[0_20px_40px_-20px_rgba(107,33,168,0.35)] overflow-hidden group`}
+            >
+              <InviteImage
+                src={src}
+                alt={`Kasun and Piumi photo ${i + 1}`}
+                className="w-full h-auto rounded-xl transition-transform duration-700 group-hover:scale-[1.03]"
+              />
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {activeIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveIndex(null)}
+            className="fixed inset-0 z-[100] bg-[#2E1065]/90 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.img
+              key={activeIndex}
+              src={galleryImages[activeIndex]}
+              alt={`Kasun and Piumi photo ${activeIndex + 1}`}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="max-w-full max-h-[85dvh] object-contain rounded-xl shadow-2xl border-4 border-white"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button type="button" onClick={step(-1)} aria-label="Previous photo" className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 text-theme-800 text-2xl shadow-lg">‹</button>
+            <button type="button" onClick={step(1)} aria-label="Next photo" className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 text-theme-800 text-2xl shadow-lg">›</button>
+            <button type="button" onClick={() => setActiveIndex(null)} aria-label="Close" className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 text-theme-800 text-xl shadow-lg">×</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}
+
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuGTj0NvL9KnWdpCBx7rawtYHWRtHSwllWSYEONdnhaIPyTnFvJGOp2srwBrNpoant/exec";
 
 export default function WeddingInvitation() {
@@ -572,7 +667,9 @@ export default function WeddingInvitation() {
                       src={brideGroomImage}
                       alt="Bride and groom wedding illustration"
                       loading="eager"
-                      className="w-[200px] h-[240px] md:w-[270px] md:h-[320px] object-cover rounded-[1.6rem] border border-theme-100"
+                      width={1066}
+                      height={1600}
+                      className="w-[240px] h-auto md:w-[320px] object-contain rounded-[1.6rem] border border-theme-100"
                     />
                   </div>
                 </motion.div>
@@ -711,6 +808,9 @@ export default function WeddingInvitation() {
                 <CountdownTimer />
               </div>
             </section>
+
+            {/* Gallery Section */}
+            <GallerySection />
 
             {/* Venue Location Section */}
             <section className="cv-auto py-24 md:py-36 bg-[#FFFFFF] relative overflow-hidden">
