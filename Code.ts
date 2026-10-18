@@ -1,3 +1,15 @@
+/**
+ * Kasun & Piumi Wedding Invitation – RSVP → Google Sheets
+ *
+ * Paste this into Extensions → Apps Script of the spreadsheet, then
+ * Deploy → New deployment → Web app (Execute as: Me, Who has access: Anyone)
+ * and put the /exec URL into SCRIPT_URL in src/App.tsx.
+ */
+
+const SPREADSHEET_ID = "14axc9Ebxy20pPUgvEKe32roAUsNesGSRCUioe6W_i0I";
+const SHEET_NAME = "RSVP";
+const HEADERS = ["Timestamp", "Name", "Guests", "Attending", "Wish"];
+
 function doPost(e) {
   return handleRequest(e);
 }
@@ -6,68 +18,63 @@ function doGet(e) {
   return handleRequest(e);
 }
 
+// Run once from the Apps Script editor to create the RSVP sheet with headers
+function setup() {
+  getOrCreateSheet();
+}
+
+function getOrCreateSheet() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  let sheet = spreadsheet.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(SHEET_NAME);
+  }
+
+  const headerRange = sheet.getRange(1, 1, 1, HEADERS.length);
+  const existing = headerRange.getValues()[0];
+  const headersOk = HEADERS.every(function (h, i) {
+    return existing[i] === h;
+  });
+
+  if (!headersOk) {
+    headerRange
+      .setValues([HEADERS])
+      .setFontWeight("bold")
+      .setBackground("#6b21a8")
+      .setFontColor("#ffffff");
+    sheet.setFrozenRows(1);
+    sheet.autoResizeColumns(1, HEADERS.length);
+  }
+
+  return sheet;
+}
+
 function handleRequest(e) {
   const lock = LockService.getScriptLock();
   lock.tryLock(10000);
 
   try {
-    const params = e.parameter;
-    const formName = params.formName;
-    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-
-    let sheetName = "";
-    if (formName === "rsvp") {
-      sheetName = "RSVP";
-    } else if (formName === "wish") {
-      sheetName = "Wishes";
-    } else {
-      return ContentService.createTextOutput(JSON.stringify({ "result": "error", "error": "Invalid formName" }))
-        .setMimeType(ContentService.MimeType.JSON);
+    const params = (e && e.parameter) || {};
+    if (params.formName !== "rsvp") {
+      return json({ result: "error", error: "Invalid formName" });
     }
 
-    let sheet = spreadsheet.getSheetByName(sheetName);
-    if (!sheet) {
-      sheet = spreadsheet.insertSheet(sheetName);
-    }
+    const sheet = getOrCreateSheet();
+    params["Attending"] = params["Guests"] === "0" ? "No" : "Yes";
 
-    let headers = [];
-    if (formName === "rsvp") {
-      headers = ["Timestamp", "Name", "Guests", "Dietary Notes"];
-    } else if (formName === "wish") {
-      headers = ["Timestamp", "Name", "Message"];
-    }
+    const row = HEADERS.map(function (h, i) {
+      return i === 0 ? new Date() : params[h] || "";
+    });
+    sheet.appendRow(row);
 
-    // Check if headers exist
-    const range = sheet.getRange(1, 1, 1, Math.max(sheet.getMaxColumns(), headers.length));
-    const existingHeaders = range.getValues()[0];
-    
-    let isHeaderMissing = false;
-    for (let i = 0; i < headers.length; i++) {
-      if (existingHeaders[i] !== headers[i]) {
-        isHeaderMissing = true;
-        break;
-      }
-    }
-
-    if (isHeaderMissing) {
-      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-      sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
-    }
-
-    const rowData = [new Date()];
-    for (let i = 1; i < headers.length; i++) {
-      rowData.push(params[headers[i]] || "");
-    }
-
-    sheet.appendRow(rowData);
-
-    return ContentService.createTextOutput(JSON.stringify({ "result": "success", "row": sheet.getLastRow() }))
-      .setMimeType(ContentService.MimeType.JSON);
-
+    return json({ result: "success", row: sheet.getLastRow() });
   } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ "result": "error", "error": error.message }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return json({ result: "error", error: error.message });
   } finally {
     lock.releaseLock();
   }
+}
+
+function json(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }

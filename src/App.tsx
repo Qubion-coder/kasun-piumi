@@ -9,7 +9,7 @@ import { Sparkles, MapPin, Calendar, Clock } from "lucide-react";
  * Accents: Purple
  */
 
-const backgroundMusic = "/fani_ellie-goulding-love-me-like-you-do-mp3.mp3";
+const backgroundMusic = "/kudmayi-web.mp3";
 
 
 const flowerCornerImage = "/silver_orchid_corner.png";
@@ -284,7 +284,7 @@ function GallerySection() {
   );
 }
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuGTj0NvL9KnWdpCBx7rawtYHWRtHSwllWSYEONdnhaIPyTnFvJGOp2srwBrNpoant/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyH3Jx9pMNSlcedQUCk9IYDQaIDcwrP5tD1_cftkWvo081qrvaZX10-EUQWkaQGjCSzAQ/exec";
 
 export default function WeddingInvitation() {
   const [isOpened, setIsOpened] = useState(false);
@@ -320,7 +320,7 @@ export default function WeddingInvitation() {
       const fieldMapping: Record<string, string> = {
         name: "Name",
         guests: "Guests",
-        dietary: "Dietary Notes",
+        dietary: "Wish",
         message: "Message"
       };
 
@@ -916,7 +916,7 @@ export default function WeddingInvitation() {
                     <div className="h-px w-16 md:w-24 bg-gradient-to-l from-transparent to-theme-300" />
                   </div>
                   <p className="text-stone-300 text-[15px] md:text-base max-w-md mx-auto leading-relaxed mb-16 tracking-wide font-light">
-                    We would be absolutely thrilled to celebrate with you. Kindly RSVP before November 5th.
+                    We would be absolutely thrilled to celebrate with you. Kindly let us know if you can make it.
                   </p>
 
                   {/* Premium RSVP Form */}
