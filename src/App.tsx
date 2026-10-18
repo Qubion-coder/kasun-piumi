@@ -9,7 +9,7 @@ import { Sparkles, MapPin, Calendar, Clock } from "lucide-react";
  * Accents: Purple
  */
 
-const backgroundMusic = "/kudmayi-web.mp3";
+const backgroundMusic = "/bg.mp3";
 
 
 const flowerCornerImage = "/silver_orchid_corner.png";
